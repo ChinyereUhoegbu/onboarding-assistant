@@ -213,6 +213,19 @@
     </nav>
 
     <div class="container mt-4">
+     <div class="row mb-3">
+    <div class="col-12">
+        <div class="alert alert-info shadow-sm" role="alert" style="font-size:1.05rem;">
+            <strong>Welcome to the IT Onboarding Assistant!</strong><br>
+            <span style="color:#212529;">Onboarding Assistant makes an employee's first day at work easy. Follow just 3 steps!!</span>
+            <br>
+            <span style="color:#0d6efd; font-weight:600;">Choose a license type 👤</span>
+            <span style="color:#0da8f0; font-weight:600;"> See the steps to follow 🪜</span>
+            <span style="color:#198754; font-weight:600;"> and Create a checklist✅</span>
+            <span style="color:#212529;"> to track your progress until everything is done.</span>
+        </div>
+    </div>
+</div>
         <!-- Step 1: License Selection -->
         <div id="step1" class="row">
             <div class="col-12">
@@ -269,17 +282,21 @@
                     </div>
                     <div class="collapse show" id="step2-content">
                         <div class="card-body">
-                            <div class="text-center mb-3">
-                                <p class="lead" style="font-size:1rem;">Review the complete onboarding workflow for this license type</p>
-                            </div>
-                            <div id="workflowChart" class="workflow-container">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+        <p class="lead mb-0 fw-semibold" style="font-size:1.08rem; color:#0d6efd;">
+    <i class="fas fa-route me-2 text-info"></i>
+    <span style="letter-spacing:0.5px;">
+        Explore the onboarding journey for this license type and see every step at a glance!
+    </span>
+</p>
+        <button id="proceedChecklistBtn" class="btn btn-light btn-sm btn-blink" onclick="proceedToChecklist()">
+            <i class="fas fa-arrow-right me-1"></i>Create Checklist
+        </button>
+    </div>
+    <div id="workflowChart" class="workflow-container">
                                 <!-- Flowchart will be generated here -->
                             </div>
-                            <div class="text-end mt-2">
-                                <button id="proceedChecklistBtn" class="btn btn-light btn-sm btn-blink" onclick="proceedToChecklist()">
-                                    <i class="fas fa-arrow-right me-1"></i>Create Checklist
-                                </button>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -402,21 +419,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="card mt-3">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-history me-2"></i>Saved Checklists</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="savedChecklists">
-                            <p class="text-muted text-center">No saved checklists</p>
-                        </div>
-                    </div>
-                </div>
+    
             </div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
     <script>
         // License workflows with tasks
         const workflows = {
@@ -476,6 +485,7 @@
             document.getElementById('username').textContent = currentUser.username;
             document.getElementById('userRole').textContent = currentUser.role;
             loadSavedChecklists();
+            
         };
 
         function selectLicense(license, event) {
@@ -495,88 +505,100 @@
         }
 
         function generateWorkflowChart(license) {
-            const tasks = workflows[license];
-            const chartContainer = document.getElementById('workflowChart');
-            const categories = {};
-            tasks.forEach(task => {
-                if (!categories[task.category]) {
-                    categories[task.category] = [];
-                }
-                categories[task.category].push(task);
-            });
-            let chartHTML = '<div class="workflow-flow">';
-            chartHTML += `
-                <div class="workflow-step" style="background: linear-gradient(135deg, #28a745, #20c997); color: white; border-color: #28a745;">
-                    <i class="fas fa-play fa-lg mb-1"></i>
-                    <div style="font-size:0.9rem;">START</div>
-                    <small>Begin ${license} Onboarding</small>
-                </div>
-                <div class="workflow-arrow"><i class="fas fa-arrow-down"></i></div>
-            `;
-            const categoryKeys = Object.keys(categories);
-            categoryKeys.forEach((category, index) => {
-                const categoryTasks = categories[category];
-                chartHTML += `
-                    <div class="category-section w-100">
-                        <div class="text-primary mb-2" style="font-size:0.95rem;">
-                            <i class="fas fa-folder me-2"></i>${category}
-                        </div>
-                        <div class="d-flex flex-wrap justify-content-center">
-                `;
-                categoryTasks.forEach((task, taskIndex) => {
-                    const isLast = taskIndex === categoryTasks.length - 1;
-                    chartHTML += `
-                        <div class="workflow-step ${task.mandatory ? 'mandatory' : 'optional'}">
-                            <i class="fas ${getTaskIcon(task.category)} fa-sm mb-1 ${task.mandatory ? 'text-danger' : 'text-success'}"></i>
-                            <div class="mb-1" style="font-size:0.9rem;">${task.name}</div>
-                            <small class="text-muted">${task.mandatory ? 'Required' : 'Optional'}</small>
-                        </div>
-                        ${!isLast ? '<div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>' : ''}
-                    `;
-                });
-                chartHTML += `
-                        </div>
-                    </div>
-                `;
-                if (index < categoryKeys.length - 1) {
-                    chartHTML += '<div class="workflow-arrow w-100 text-center"><i class="fas fa-arrow-down"></i></div>';
-                }
-            });
-            chartHTML += `
-                <div class="workflow-arrow"><i class="fas fa-arrow-down"></i></div>
-                <div class="workflow-step" style="background: linear-gradient(135deg, #dc3545, #e74c3c); color: white; border-color: #dc3545;">
-                    <i class="fas fa-check-circle fa-lg mb-1"></i>
-                    <div style="font-size:0.9rem;">COMPLETE</div>
-                    <small>${license} Onboarding Finished</small>
-                </div>
-            `;
-            chartHTML += '</div>';
-            const mandatoryCount = tasks.filter(t => t.mandatory).length;
-            const optionalCount = tasks.filter(t => !t.mandatory).length;
-            chartHTML += `
-                <div class="row mt-2">
-                    <div class="col-4">
-                        <div class="text-center p-1 bg-light rounded">
-                            <div class="text-primary mb-0" style="font-size:1.1rem;">${tasks.length}</div>
-                            <small>Total Tasks</small>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="text-center p-1 bg-light rounded">
-                            <div class="text-danger mb-0" style="font-size:1.1rem;">${mandatoryCount}</div>
-                            <small>Required</small>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="text-center p-1 bg-light rounded">
-                            <div class="text-success mb-0" style="font-size:1.1rem;">${optionalCount}</div>
-                            <small>Optional</small>
-                        </div>
-                    </div>
-                </div>
-            `;
-            chartContainer.innerHTML = chartHTML;
+    const tasks = workflows[license];
+    const chartContainer = document.getElementById('workflowChart');
+    const categories = {};
+    tasks.forEach(task => {
+        if (!categories[task.category]) {
+            categories[task.category] = [];
         }
+        categories[task.category].push(task);
+    });
+
+    // Calculate stats
+    const mandatoryCount = tasks.filter(t => t.mandatory).length;
+    const optionalCount = tasks.filter(t => !t.mandatory).length;
+
+    // Start chartHTML with the stats row at the top
+    let chartHTML = `
+        <div class="row mb-2">
+            <div class="col-4">
+                <div class="text-center p-1 bg-light rounded">
+                    <div class="text-primary mb-0" style="font-size:1.1rem;">${tasks.length}</div>
+                    <small>Total Tasks</small>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="text-center p-1 bg-light rounded">
+                    <div class="text-danger mb-0" style="font-size:1.1rem;">${mandatoryCount}</div>
+                    <small>Required</small>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="text-center p-1 bg-light rounded">
+                    <div class="text-success mb-0" style="font-size:1.1rem;">${optionalCount}</div>
+                    <small>Optional</small>
+                </div>
+            </div>
+        </div>
+    `;
+
+    chartHTML += '<div class="workflow-flow">';
+    // START block with arrow below
+    chartHTML += `
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="workflow-step" style="background: linear-gradient(135deg, #28a745, #20c997); color: white; border-color: #28a745;">
+                <i class="fas fa-play fa-lg mb-1"></i>
+                <div style="font-size:0.9rem;">START</div>
+                <small>Begin ${license} Onboarding</small>
+            </div>
+            <div class="workflow-arrow" style="margin:0;"><i class="fas fa-arrow-down"></i></div>
+        </div>
+    `;
+    const categoryKeys = Object.keys(categories);
+    categoryKeys.forEach((category, index) => {
+        const categoryTasks = categories[category];
+        chartHTML += `
+            <div class="category-section w-100">
+                <div class="text-primary mb-2" style="font-size:0.95rem;">
+                    <i class="fas fa-folder me-2"></i>${category}
+                </div>
+                <div class="d-flex flex-wrap justify-content-center">
+        `;
+        categoryTasks.forEach((task, taskIndex) => {
+            const isLast = taskIndex === categoryTasks.length - 1;
+            chartHTML += `
+                <div class="workflow-step ${task.mandatory ? 'mandatory' : 'optional'}">
+                    <i class="fas ${getTaskIcon(task.category)} fa-sm mb-1 ${task.mandatory ? 'text-danger' : 'text-success'}"></i>
+                    <div class="mb-1" style="font-size:0.9rem;">${task.name}</div>
+                    <small class="text-muted">${task.mandatory ? 'Required' : 'Optional'}</small>
+                </div>
+                ${!isLast ? '<div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>' : ''}
+            `;
+        });
+        chartHTML += `
+                </div>
+            </div>
+        `;
+        if (index < categoryKeys.length - 1) {
+            chartHTML += '<div class="workflow-arrow w-100 text-center"><i class="fas fa-arrow-down"></i></div>';
+        }
+    });
+    // Arrow above COMPLETE button, then COMPLETE button
+    chartHTML += `
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="workflow-arrow" style="margin:0;"><i class="fas fa-arrow-down"></i></div>
+            <div class="workflow-step" style="background: linear-gradient(135deg, #dc3545, #e74c3c); color: white; border-color: #dc3545;">
+                <i class="fas fa-check-circle fa-lg mb-1"></i>
+                <div style="font-size:0.9rem;">COMPLETE</div>
+                <small>${license} Onboarding Finished</small>
+            </div>
+        </div>
+    `;
+    chartHTML += '</div>';
+
+    chartContainer.innerHTML = chartHTML;
+}
 
         function getTaskIcon(category) {
             const icons = {
@@ -666,6 +688,7 @@
             document.getElementById('currentLicense').textContent = selectedLicense;
             document.getElementById('step3-tasks-progress').scrollIntoView({ behavior: 'smooth' });
             document.getElementById('savedChecklistCollapse').classList.remove('show');
+            logAudit(`Created new checklist "${checklistName}" for license ${selectedLicense}`);
         }
 
         // Save progress and show saved checklist collapse
@@ -729,6 +752,7 @@
             task.completedAt = new Date().toISOString();
             renderTasks();
             updateProgress();
+            logAudit(`Completed task "${task.name}" in checklist "${currentChecklist.name}"`);
         }
 
         function ignoreTask(taskId) {
@@ -736,6 +760,7 @@
             task.status = 'ignored';
             renderTasks();
             updateProgress();
+            logAudit(`Ignored task "${task.name}" in checklist "${currentChecklist.name}"`);
         }
 
         function resetTask(taskId) {
@@ -774,6 +799,7 @@
             localStorage.setItem(`checklists_${currentUser.username}`, JSON.stringify(savedChecklists));
             alert('Progress saved successfully!');
             loadSavedChecklists();
+            logAudit(`Saved progress on checklist "${currentChecklist.name}"`);
         }
 
         function loadSavedChecklists() {
@@ -842,6 +868,22 @@
             localStorage.removeItem('currentUser');
             window.location.href = 'index.html';
         }
+        function logAudit(message) {
+  const config = JSON.parse(localStorage.getItem("systemConfig")) || { auditLogs: true };
+  if (!config.auditLogs) return;
+
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (!currentUser) return;
+
+  const logs = JSON.parse(localStorage.getItem("auditLogs")) || [];
+  logs.push({
+    user: currentUser.username,
+    role: currentUser.role,
+    message,
+    time: new Date().toLocaleString()
+  });
+  localStorage.setItem("auditLogs", JSON.stringify(logs));
+}
     </script>
 </body>
 </html>

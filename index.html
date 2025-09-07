@@ -111,7 +111,11 @@
                 // Redirect based on role
                 if (users[username].role === 'Administrator') {
                     window.location.href = 'admin.html';
-                } else {
+                } 
+                 else if (users[username].role === 'IT Manager') {
+                    window.location.href = 'manager.html';
+                }
+                else {
                     window.location.href = 'dashboard.html';
                 }
             } else {
