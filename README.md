@@ -1,3 +1,4 @@
+This project was created for my MIT programme (University of Lagos - MIT 811)
 # IT Onboarding Assistant
 
 A role-based onboarding assistant for IT Staff, Managers, and Administrators, designed to standardize and streamline the onboarding of new hires across the EMEA region.  
@@ -72,12 +73,8 @@ When these objectives are achieved, the project will:
 - View detailed audit logs of all onboarding activities.  
 
 ## ⚙️ How to Use
-1. Clone the repo:  
-   ```bash
-   git clone https://github.com/your-username/repo-name.git
-   
+1. Clone the repo
 2. Open index.html in your browser.
-   
 3. Log in with one of the sample accounts:
 Staff: staff / staff123
 Manager: manager / manager123
