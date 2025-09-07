@@ -1,12 +1,12 @@
-This project was created for my MIT programme (University of Lagos - MIT 811)
+This project was created for my **MIT programme (University of Lagos - MIT 811)**
 # IT Onboarding Assistant
 
-A role-based onboarding assistant for IT Staff, Managers, and Administrators, designed to standardize and streamline the onboarding of new hires across the EMEA region.  
+A role-based onboarding assistant for IT Staff, Managers, and Administrators, designed to standardize and streamline the onboarding of new hires.  
 
 🔗 **Live Demo (GitHub Pages):** (https://chinyereuhoegbu.github.io/onboarding-assistant/)
 
 ## 📌 Problem Statement
-This project has been initiated to streamline and standardize the IT onboarding process for new agents in the EMEA region.  
+This project has been initiated to streamline and standardize the IT onboarding process for new agents.  
 
 Currently, onboarding new hires involves multiple **manual steps** such as account creation, license assignment, and system verification. These steps vary depending on the user’s license type (F1, F3, or E3), but there is no centralized guide or tool to ensure consistency across IT and helpdesk teams.  
 
@@ -45,7 +45,7 @@ The PoC validates the following:
 - CI/CD pipelines for automated deployment.  
 
 ## 🎯 Objectives
-- Standardize the IT onboarding process across the EMEA region.  
+- Standardize the IT onboarding process.  
 - Reduce errors and delays by providing guided, license-type-specific flows.  
 - Improve efficiency for IT and helpdesk teams with simpler task management.  
 - Enhance visibility and accountability in the onboarding process.  
